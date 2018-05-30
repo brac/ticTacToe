@@ -1,10 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-* {
-  font-family: 'Roboto';
-}
-
 body{
+  font-family: 'Roboto';
   background-color: black;
 }
 
@@ -32,10 +29,10 @@ body{
 }
 
 .gameboard-button {
-  line-height: 140px;
-  text-align: center;
   background-color: black;
 }
+
+
 
 .scoreboard {
   padding: 0 2em 0 2em;
