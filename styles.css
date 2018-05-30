@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+  font-family: 'Roboto';
+}
+
+body{
+  background-color: black;
+}
+
+.pagewrap {
+  background-color: black;
+  height: 100%;
+}
+
+.gameboard, .scoreboard {
+  margin: 5%;
+}
+
+.gameboard-button, .scoreboard {
+  color: white;
+}
+
+.gameboard {
+  font-size: 10em;
+  background-color: white;
+  display: grid;
+  text-align: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 140px;
+  grid-gap: 5px 5px;
+}
+
+.gameboard-button {
+  line-height: 140px;
+  text-align: center;
+  background-color: black;
+}
+
+.scoreboard {
+  padding: 0 2em 0 2em;
+  font-size: 1.5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.scoreboard-score {
+  padding-top: .3em;
+  font-size: 1.2em;
+}
+
+.hidden {
+  display: none;
+}
