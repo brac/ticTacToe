@@ -18,14 +18,22 @@
       this.player1Score = scoreboard.querySelector('.scoreboard-player1')
       this.player2Score = scoreboard.querySelector('.scoreboard-player2')
       this.state = []
+      this.winConditions = [
+      ['a1', 'a2', 'a3'],
+      ['b1', 'b2', 'b3'],
+      ['c1', 'c2', 'c3'],
+      ['a1', 'b1', 'c1'],
+      ['a2', 'b2', 'c2'],
+      ['a3', 'b3', 'c3'],
+      ['a1', 'b2', 'c3'],
+      ['a3', 'b2', 'c1']]
     }
 
     input(value){
       const clickedSpace =  this.gameboard.querySelector(`.${value.classList[0]}`)
-      console.log(clickedSpace.classList[0].split('-')[1])
 
       if (this.playerTurn < 1) {
-        // Add player turn to state
+        // Add player 1 turn to state
         this.state.push(`${clickedSpace.classList[0].split('-')[1]}o`)
 
         // Display o on the clicked square
@@ -45,7 +53,7 @@
         this.playerTurn++
 
       } else {
-        // Add player turn to state
+        // Add player 2 turn to state
         this.state.push(`${clickedSpace.classList[0].split('-')[1]}x`)
 
         // Display x on the clicked square
@@ -67,13 +75,30 @@
 
     checkForWin(playerTurn, state){
       if (playerTurn < 1) {
-        // get all the o entries
-        let player1Moves = []
-        state.forEach(t => {if (t.indexOf('o') > -1) { player1Moves.push(t) }})
+        let moves = []
+        state.forEach(t => {
+              if (t.indexOf('o') > -1) { moves.push(t.split('o')[0]) }})
+        moves = moves.sort()
+
+        // TODO: Compare moves to win conditions
+        console.log(moves)
+
       } else {
-        let player2Moves = []
-        state.forEach(t => {if (t.indexOf('x') > -1) { player2Moves.push(t) }})
+        let moves = []
+        state.forEach(t => {
+              if (t.indexOf('x') > -1) { moves.push(t.split('x')[0]) }})
       }
+    }
+
+    reset(){
+      const squares = document.querySelectorAll('.gameboard-button')
+      for (let i = 0; i < 9; i++) {
+        let xOrY = squares[i].children
+        xOrY[0].classList.add('hidden')
+        xOrY[1].classList.add('hidden')
+      }
+      this.state = []
+      this.turnCount = 0
     }
   }
 
@@ -85,6 +110,9 @@
     ticTacToe.gameboard.addEventListener('click', (event) => {
       // If clicked gametile already has a mark on it, do nothing
       if (event.target.classList.length < 2) {
+        if (ticTacToe.turnCount === 9) {
+          ticTacToe.reset()
+        }
         return
       } else {
         ticTacToe.input(event.target)
