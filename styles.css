@@ -29,10 +29,10 @@ body{
 }
 
 .gameboard-button {
+  line-height: 140px;
   background-color: black;
+  cursor: pointer;
 }
-
-
 
 .scoreboard {
   padding: 0 2em 0 2em;
@@ -46,6 +46,10 @@ body{
 .scoreboard-score {
   padding-top: .3em;
   font-size: 1.2em;
+}
+
+.unfocused {
+  color: grey;
 }
 
 .hidden {
