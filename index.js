@@ -73,20 +73,40 @@
       }
     }
 
+    // TODO: Hook this in to the flashing and score updating
     checkForWin(playerTurn, state){
+      let matched = []
+
+      // Player one check for win
       if (playerTurn < 1) {
         let moves = []
-        state.forEach(t => {
-              if (t.indexOf('o') > -1) { moves.push(t.split('o')[0]) }})
-        moves = moves.sort()
 
-        // TODO: Compare moves to win conditions
-        console.log(moves)
+        // Gather all the moves that player one has made and put those in moves
+        state.forEach(t => {
+          if (t.indexOf('o') > -1) {
+            moves.push(t.split('o')[0])
+          }
+        })
+        moves.sort()
+
+        // TODO: Ensure wins for all diagonals, currently not registering
+        this.winConditions.some(winState => {
+          if (matched.length == 3) {
+            console.log(matched)
+            return true
+          } else {
+            matched = []
+          }
+          for (let i = 0; i < moves.length; i++) {
+            if (winState.indexOf(moves[i]) > -1) {
+              matched.push(moves[i])
+            }
+          }
+        })
 
       } else {
-        let moves = []
-        state.forEach(t => {
-              if (t.indexOf('x') > -1) { moves.push(t.split('x')[0]) }})
+        // Player two check for win
+        console.log('I will check for player 2 win')
       }
     }
 
