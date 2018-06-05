@@ -2,6 +2,7 @@
 // TODO:
 //     Flash winning row
 //     Flash tied grid
+//     Focus all scoreboard elements on game completion
 
 
 (function () {
@@ -10,6 +11,7 @@
     constructor(gameboard, scoreboard) {
       this.turnCount = 0
       this.gameboard = gameboard
+      this.squares = gameboard.children
       this.scoreboard = scoreboard
       this.playerTurn = 0
       this.tieEl = scoreboard.querySelector('.scoreboard-tie')
@@ -106,6 +108,7 @@
         //     Update the player scores and
         //     Return true to break the .some() loop
         if (matched.length == 3) {
+          this.flash(matched)
           if (playerTurn < 1) {
             this.player1Score++
             this.player1ScoreEl.textContent = this.player1Score
@@ -123,6 +126,7 @@
         } else {
           matched = []
           if (this.turnCount >= 9 ) {
+            this.flash()
             this.tieScore++
             this.tieScoreEl.textContent = this.tieScore
             return true
@@ -132,14 +136,22 @@
     }
 
     reset(){
-      const squares = document.querySelectorAll('.gameboard-button')
       for (let i = 0; i < 9; i++) {
-        let xOrY = squares[i].children
+        let xOrY = this.squares[i].children
         xOrY[0].classList.add('hidden')
         xOrY[1].classList.add('hidden')
       }
       this.state = []
       this.turnCount = 0
+    }
+
+    // TODO: Flash the corresponding squares to the ones provided
+    //     Flash the grid if none are provided
+    flash(items){
+      Object.keys(this.squares).forEach(i => {
+        console.log(this.squares[i].classList[0].split('-')[1])
+        console.log(this.squares[i])
+      })
     }
   }
 
