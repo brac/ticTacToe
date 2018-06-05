@@ -1,10 +1,7 @@
 // jshint asi:true
-// TODO: Display something when clicked
-//     Dispaly the correct symbol depending on player
-//     Check for win
+// TODO:
 //     Flash winning row
 //     Flash tied grid
-//     Reset board, keep score
 
 
 (function () {
@@ -15,10 +12,15 @@
       this.gameboard = gameboard
       this.scoreboard = scoreboard
       this.playerTurn = 0
-      this.player1ScoreEl = scoreboard.querySelector('.scoreboard-player1')
-      this.player2ScoreEl = scoreboard.querySelector('.scoreboard-player2')
-      this.player1Wins = 0
-      this.player2Wins = 0
+      this.tieEl = scoreboard.querySelector('.scoreboard-tie')
+      this.tieScoreEl = this.tieEl.children[1]
+      this.tieScore = 0
+      this.player1El = scoreboard.querySelector('.scoreboard-player1')
+      this.player2El = scoreboard.querySelector('.scoreboard-player2')
+      this.player1ScoreEl = this.player1El.children[1]
+      this.player2ScoreEl = this.player2El.children[1]
+      this.player1Score = 0
+      this.player2Score = 0
       this.state = []
       this.winConditions = [
       ['a1', 'a2', 'a3'],
@@ -32,7 +34,6 @@
     }
 
     input(value){
-      console.log(this.turnCount)
       const clickedSpace =  this.gameboard.querySelector(`.${value.classList[0]}`)
 
       if (this.playerTurn < 1) {
@@ -43,8 +44,8 @@
         clickedSpace.children[0].classList.remove('hidden')
 
         // Switch focused and unfocused player turns
-        this.player1ScoreEl.classList.add('unfocused')
-        this.player2ScoreEl.classList.remove('unfocused')
+        this.player1El.classList.add('unfocused')
+        this.player2El.classList.remove('unfocused')
 
         // Increment turn count
         this.turnCount++
@@ -63,8 +64,8 @@
         clickedSpace.children[1].classList.remove('hidden')
 
         // Switch focused and unfocused player turns
-        this.player1ScoreEl.classList.remove('unfocused')
-        this.player2ScoreEl.classList.add('unfocused')
+        this.player1El.classList.remove('unfocused')
+        this.player2El.classList.add('unfocused')
 
         // Increment turn count
         this.turnCount++
@@ -101,17 +102,31 @@
           }
         }
 
-        // If matched array is 3, we have a full match. Return true to break
-        //     the .some() loop
+        // If matched array is 3, we have a full match.
+        //     Update the player scores and
+        //     Return true to break the .some() loop
         if (matched.length == 3) {
-          console.log(`Player ${playerSymbol} Wins! ${matched}`)
+          if (playerTurn < 1) {
+            this.player1Score++
+            this.player1ScoreEl.textContent = this.player1Score
+          } else {
+            this.player2Score++
+            this.player2ScoreEl.textContent = this.player2Score
+          }
+
+          // Trigger the reset by setting the turnCount to max turns
           this.turnCount = 9
           return true
 
         // If we have less than 3, it was an incomplete match so reset the
-        //     matched array
+        //     matched array and continue looking
         } else {
           matched = []
+          if (this.turnCount >= 9 ) {
+            this.tieScore++
+            this.tieScoreEl.textContent = this.tieScore
+            return true
+          }
         }
       })
     }
