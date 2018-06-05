@@ -91,16 +91,17 @@
 
         // TODO: Ensure wins for all diagonals, currently not registering
         this.winConditions.some(winState => {
+          for (let i = 0; i < moves.length; i++) {
+            if (winState.indexOf(moves[i]) > -1) {
+              matched.push(moves[i])
+            }
+          }
+
           if (matched.length == 3) {
             console.log(matched)
             return true
           } else {
             matched = []
-          }
-          for (let i = 0; i < moves.length; i++) {
-            if (winState.indexOf(moves[i]) > -1) {
-              matched.push(moves[i])
-            }
           }
         })
 
