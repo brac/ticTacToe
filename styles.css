@@ -29,6 +29,8 @@ body{
 }
 
 .gameboard-button {
+  transition-property: font-size;
+  transition-duration: .5s;
   line-height: 140px;
   background-color: black;
   cursor: pointer;
@@ -54,4 +56,10 @@ body{
 
 .hidden {
   display: none;
+}
+
+.flash {
+  font-size: 1.4em;
+  transition-property: font-size;
+  transition-duration: .5s;
 }
