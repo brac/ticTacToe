@@ -15,8 +15,10 @@
       this.gameboard = gameboard
       this.scoreboard = scoreboard
       this.playerTurn = 0
-      this.player1Score = scoreboard.querySelector('.scoreboard-player1')
-      this.player2Score = scoreboard.querySelector('.scoreboard-player2')
+      this.player1ScoreEl = scoreboard.querySelector('.scoreboard-player1')
+      this.player2ScoreEl = scoreboard.querySelector('.scoreboard-player2')
+      this.player1Wins = 0
+      this.player2Wins = 0
       this.state = []
       this.winConditions = [
       ['a1', 'a2', 'a3'],
@@ -30,6 +32,7 @@
     }
 
     input(value){
+      console.log(this.turnCount)
       const clickedSpace =  this.gameboard.querySelector(`.${value.classList[0]}`)
 
       if (this.playerTurn < 1) {
@@ -40,8 +43,8 @@
         clickedSpace.children[0].classList.remove('hidden')
 
         // Switch focused and unfocused player turns
-        this.player1Score.classList.add('unfocused')
-        this.player2Score.classList.remove('unfocused')
+        this.player1ScoreEl.classList.add('unfocused')
+        this.player2ScoreEl.classList.remove('unfocused')
 
         // Increment turn count
         this.turnCount++
@@ -60,8 +63,8 @@
         clickedSpace.children[1].classList.remove('hidden')
 
         // Switch focused and unfocused player turns
-        this.player1Score.classList.remove('unfocused')
-        this.player2Score.classList.add('unfocused')
+        this.player1ScoreEl.classList.remove('unfocused')
+        this.player2ScoreEl.classList.add('unfocused')
 
         // Increment turn count
         this.turnCount++
@@ -76,39 +79,41 @@
     // TODO: Hook this in to the flashing and score updating
     checkForWin(playerTurn, state){
       let matched = []
+      const playerSymbol = (playerTurn < 1) ? 'o' : 'x'
 
-      // Player one check for win
-      if (playerTurn < 1) {
-        let moves = []
+      let moves = []
 
-        // Gather all the moves that player one has made and put those in moves
-        state.forEach(t => {
-          if (t.indexOf('o') > -1) {
-            moves.push(t.split('o')[0])
+      // Gather all the moves that player one has made and put those in moves
+      state.forEach(t => {
+        if (t.indexOf(playerSymbol) > -1) {
+          moves.push(t.split(playerSymbol)[0])
+        }
+      })
+      moves.sort()
+
+      // Loop over the win conditions
+      this.winConditions.some(winState => {
+        // Check each move against the current winState array
+        for (let i = 0; i < moves.length; i++) {
+          // Move a successful match to the matched array
+          if (winState.indexOf(moves[i]) > -1) {
+            matched.push(moves[i])
           }
-        })
-        moves.sort()
+        }
 
-        // TODO: Ensure wins for all diagonals, currently not registering
-        this.winConditions.some(winState => {
-          for (let i = 0; i < moves.length; i++) {
-            if (winState.indexOf(moves[i]) > -1) {
-              matched.push(moves[i])
-            }
-          }
+        // If matched array is 3, we have a full match. Return true to break
+        //     the .some() loop
+        if (matched.length == 3) {
+          console.log(`Player ${playerSymbol} Wins! ${matched}`)
+          this.turnCount = 9
+          return true
 
-          if (matched.length == 3) {
-            console.log(matched)
-            return true
-          } else {
-            matched = []
-          }
-        })
-
-      } else {
-        // Player two check for win
-        console.log('I will check for player 2 win')
-      }
+        // If we have less than 3, it was an incomplete match so reset the
+        //     matched array
+        } else {
+          matched = []
+        }
+      })
     }
 
     reset(){
@@ -129,12 +134,16 @@
         document.querySelector('.scoreboard'))
 
     ticTacToe.gameboard.addEventListener('click', (event) => {
+      // If the turn count is 9 or above, reset the gameboard
+      if (ticTacToe.turnCount >= 9) {
+        ticTacToe.reset()
+        return
+      }
+
       // If clicked gametile already has a mark on it, do nothing
       if (event.target.classList.length < 2) {
-        if (ticTacToe.turnCount === 9) {
-          ticTacToe.reset()
-        }
         return
+
       } else {
         ticTacToe.input(event.target)
       }
